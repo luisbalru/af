@@ -8,10 +8,6 @@ TODO Qué es la transformada de Fourier cuántica y cuáles son sus limitaciones
 
 TODO Qué es el problema del subgrupo abeliano y sus aplicaciones.
 
-## TODO Intro a complejidad
-
-No sé si debería ir aquí
-
 ## Principios de la mecánica cuántica
 
 El modelo habitual de ordenadores cuánticos viene dado por un sistema cuántico aislado en el que se permiten algunas operaciones básicas dadas por transformaciones unitarias. En esta sección describimos los principios de mecánica cuántica que utilizamos para definir nuestro modelo.
@@ -26,27 +22,25 @@ En primer lugar definimos el espacio de estados de un sistema cuántico:
 El *espacio de estados* de un sistema cuántico (aislado) es el espacio proyectivo asociado a un espacio de Hilbert complejo y separable. Es decir, los estados de un sistema cuántico se identifican con los subespacios de dimensión 1 (*rayos*) de un espacio de Hilbert complejo separable.
 :::
 
-La computación cuántica se restringe tradicionalmente a sistemas cuánticos de dimensión finita, por lo que podemos tomar como espacio de estados canónico $\mathbb{P}\mathbb{C}^N$. Habitualmente, en lugar de trabajar en el espacio proyectivo escogemos un representante de norma 1 de cada rayo (*vector de estado*). El vector de estado de un rayo es único salvo constante de la forma $e^{i\theta} (\theta \in \mathbb{R})$.
+La computación cuántica se restringe tradicionalmente a sistemas cuánticos de dimensión finita, por lo que podemos tomar como espacio de estados canónico $\mathbb{P}\mathbb{C}^N$. En lugar de trabajar en el espacio proyectivo escogemos un representante de norma 1 de cada rayo (*vector de estado*).
 
-Utilizamos la notación habitual en mecánica cuántica, en la que los vectores del espacio de Hilbert se representan por *kets* de la forma $\ket{\psi}, \ket{\psi}$. Cada ket tiene asociado un *bra*, que en el caso finito podemos identificar con su adjunto conjugado $\bra{\psi} = \ket{\psi}^\dagger$. De esta forma el producto escalar se define $$(\ket{\psi},\ket{\phi}) := \bk{\psi}{\phi} := \ket{\psi}^\dagger \ket{\phi}.$$
+Utilizamos la notación habitual en mecánica cuántica, en la que los vectores del espacio de Hilbert se representan por *kets* de la forma $\ket{\psi}, \ket{\psi}$. Cada ket tiene asociado un *bra*, que en el caso finito podemos identificar con su adjunto conjugado $\bra{\psi} = \ket{\psi}^\dagger$. De esta forma el producto escalar se define $(\ket{\psi},\ket{\phi}) := \bk{\psi}{\phi} := \ket{\psi}^\dagger \ket{\phi}$.
 
-Un **qubit** es un sistema cuántico con espacio de estados de dimensión 2.
-Dado un qubit fijamos una base ortonormal $(\ket{0},\ket{1})$. El término se utiliza también para referirse a un estado concreto; utilizando la identificación con representantes de norma 1 tenemos que un qubit es por tanto un vector $$\ket{\psi} = \alpha \ket{0} + \beta \ket{1} \text{ tal que } \norm{\ket{\psi}} = |\alpha|^2 + |\beta|^2 = 1.$$
+Un **qubit** es un sistema cuántico con espacio de estados de dimensión 2 con una base ortonormal $(\ket{0},\ket{1})$. El término se utiliza también para referirse a un estado concreto; utilizando la identificación con representantes de norma 1 tenemos que un qubit es por tanto un vector $$\ket{\psi} = \alpha \ket{0} + \beta \ket{1} \text{ tal que } \norm{\ket{\psi}} = |\alpha|^2 + |\beta|^2 = 1.$$
+En computación cuántica nos restringimos a sistemas compuestos por qubits. Esta restricción no supone ningún cambio en términos de qué problemas pueden resolverse eficientemente en un ordenador cuántico[TODO cita]. 
 
 ### Sistemas compuestos 
-
-Aunque podemos considerar otros tipos de sistemas cuánticos, en computación cuántica nos restringimos a sistemas compuestos por qubits. Esta restricción no supone ningún cambio en términos de qué problemas pueden resolverse en tiempo polinomial en un ordenador cuántico[TODO cita]. 
 
 El espacio de estados de un sistema compuesto viene dado por el producto tensorial. 
 Exponemos brevemente la construcción de un espacio de Hilbert a partir del producto tensorial de dos espacios de Hilbert.
 
 :::{.proposition}
-Sean $H_1, H_2$ espacios de Hilbert con bases ortonormales $B_1 = \{u_i\}_{i \in I}, B_2 = \{v_j\}_{j \in J}$. Entonces el producto tensorial de $H_1, H_2$ como espacios vectoriales  tiene estructura de espacio de Hilbert con producto escalar dado por la extensión lineal de
+Sean $H_1, H_2$ espacios de Hilbert con bases ortonormales $B_1 = \{u_i\}_{i \in I}, B_2 = \{v_j\}_{j \in J}$. Entonces el producto tensorial de $H_1, H_2$ como espacios vectoriales  tiene estructura de espacio de Hilbert con producto escalar dado por la extensión bilineal y continua de
 $$\bk{u \otimes v}{u' \otimes v'} = \bk{u}{u'} \bk{v}{v'}$$
 y $B_1 \otimes B_2 := \{u_i \otimes v_j\}_{(i,j)}$ es una base ortonormal.
 :::
-:::{.proof}
-
+:::{.proof} 
+TODO (se deja sin demostrar?)
 :::
 
 De esta forma está justificado el siguiente principio:
@@ -76,7 +70,8 @@ Las operaciones cuánticas se corresponden con operadores unitarios
 La evolución del estado de un sistema cuántico $\ket{\psi(t)}$ de un tiempo $t$ a un tiempo $t+1$ viene dada por una transformación unitaria $U$, esto es $$\ket{\psi(t+1)} = U\ket{\psi(t)}$$
 :::
 
-No todas las transformaciones unitarias son físicamente realizables, pero sí que podemos aproximarlas de forma eficiente a partir de un *conjunto universal* finito de transformaciones.
+No todas las transformaciones unitarias son físicamente realizables, pero sí que podemos aproximarlas de forma eficiente a partir de un *conjunto universal* de transformaciones.
+Por simplicidad tomamos como conjunto universal para este trabajo las operaciones unitarias que actúan sobre 3 qubits, aunque existen conjuntos universales finitos[TODO citar].
 
 Por último las mediciones en el caso finito nos dan una variable aleatoria discreta.
 Aunque el modelo general cuántico admite mediciones más generales que las que describimos a continuación el principio que presentamos es suficiente para simular, modificando convenientemente el ordenador cuántico con operaciones unitarias adecuadas cualquier medición arbitraria.
@@ -90,48 +85,62 @@ Como los vectores de estado son vectores unitarios tenemos que la variable aleat
 
 ### Algunos ejemplos de operaciones unitarias
 
-TODO
+Existen una gran cantidad de operaciones unitarias que se utilizan en computación cuántica; en este trabajo nos restringimos a aquellas que tienen aplicación para el algoritmo de la transformada cuántica de Fourier.
+
+:::{.proposition}
+Las siguientes operaciones dadas por su expresión matricial respecto de la base usual son unitarias:
+
+1. La identidad $I_n$,
+2. La *puerta cuántica de Hadamard* es la operación unitaria dada por la expresión matricial $$H = \frac{1}{\sqrt{2}}\left(\begin{matrix} 1 & 1 \\ 1 & -1 \end{matrix}\right), \qquad H\ket{0} = \frac{1}{\sqrt{2}}(\ket{0} + \ket{1}) \quad H\ket{1} = \frac{1}{\sqrt{2}}(\ket{0} - \ket{1}),$$
+3. Si $\theta \in [0,2\pi]$, la *puerta de cambio de fase $R_\theta$*,
+$$R_\theta = \left(\begin{matrix}1 & 0 \\ 0 & e^{i\theta}\end{matrix}\right), \qquad R_\theta\ket{0} = 0, \quad R_\theta\ket{1} = e^{i\theta}\ket{1}$$
+:::
+:::{.proof}
+Es trivial comprobando que el producto de la expresión matricial por su adjunta conjugada da la identidad.
+:::
+
+Además, a partir de estas operaciones podemos construir otras nuevas operaciones unitarias.
+En concreto necesitaremos dos tipos de operaciones:
+
+1. Dados dos operadores lineales $A_i : H_i \to H'_i$ ($i = 1,2$) existe una única aplicación lineal $A_1 \otimes A_2 : H_1 \otimes H_2 \to H'_1 \otimes H'_2$ tal que
+$$(A_1 \otimes A_2)(\ket{x} \otimes \ket{y}) = (A_1\ket{x}) \otimes (A_2\ket{y}),$$
+conocida como su *producto tensorial*. 
+Si $A_1$y $A_2$ son unitarias también lo será $A_1 \otimes A_2$.
+2. Si $A$ es una operación unitaria podemos definir la operación $A$*-controlada* como la operación unitaria dada por la expresión matricial por bloques
+$$C_A= \left(\begin{array}{c|c} I_2 & 0 \\ \hline 0 & A \end{array} \right), \qquad C_A\ket{0}\ket{x} = \ket{0}\ket{x}, \quad C_A\ket{1}\ket{x} = \ket{1}A\ket{x}$$
+esta operación toma un qubit $\ket{a}$ y aplica de forma condicional la operación $A$ al resto de qubits si $\ket{a} = \ket{1}$ o lo deja igual si $\ket{a} = \ket{1}$.
+
+Estas operaciones nos permiten componer operaciones unitarias básicas para crear una nueva operación unitaria que actúe sobre un mayor número de qubits.
 
 ## El modelo de circuitos cuánticos
 
 A partir de este modelo físico que asumimos como dado construimos un modelo de computador cuántico.
 Existen diversos modelos equivalentes que formalizan la noción de un algoritmo cuántico pero en este trabajo nos centramos en el modelo de *circuitos cuánticos*, que es el más utilizado.
 
-La entrada de un circuito cuántico será un producto tensorial de qubits; aunque otros modelos son posibles nos restringimos a este por analogía al modelo de bits clásico. Permitimos además el uso de *qubits ancilla* que podamos utilizar para cálculos auxiliares.
-
 :::{.definition}
-Un circuito cuántico TODO
+Un circuito cuántico $C$ con $n$ entradas es una sucesión finita de operaciones cuánticas $\{P_1, \dots, P_k\}$ con expresión matricial de dimensión $2^n \times 2^n$ construidas mediante el producto de elementos de un conjunto universal de puertas cuánticas.
 
-Si $x \in \{0,1\}^\ast$, notamos con $C_n(x)$ la variable aleatoria de su salida.
-
-Una *familia de circuitos cuánticos* es una sucesión de circuitos cuánticos $\{C_n\}_{n \in \mathbb{N}}$ tal que $C_n$ tiene exactamente $n$ entradas.
+Si $\ket{\psi}$ es un estado cuántico, notamos con $C(\ket{\psi})$ la variable aleatoria resultante de medir el estado cuántico $P_k \dots P_1 \ket{\psi}$ respecto de la base usual.
 :::
-
 
 La noción de familia de circuitos cuánticos nos permite formalizar el cálculo de funciones $f:\{0,1\}^\ast \to \{0,1\}^\ast$. Como las mediciones son probabilísticas el resultado del cálculo por parte de una familia de circuitos cuánticos será, en general, no determinista, lo que formaliza la siguiente definición.
 
 Para el cálculo de funciones debemos asumir que dada $x \in \{0,1\}^\ast$ arbitraria podemos preparar el estado inicial asociado $\ket{x}$ en como mucho $n = |x|$ pasos.
 
 :::{.definition}
-Una familia de circuitos cuánticos $\{C_n\}_{n \in \mathbb{N}}$ *calcula* una función $f: \{0,1\}^\ast \to \{0,1\}^\ast$ si para todo $x \in \{0,1\}^\ast$ con longitud $|x| = n \in \mathbb{N}$ se tiene que 
-$$P[C_n(\ket{x}) = f(x)] \geq \frac23$$
+Una familia de circuitos cuánticos $\{C_n\}_{n \in \mathbb{N}}$ donde $C_n$ tiene $p(n) + n$ entradas *calcula* una función $f: \{0,1\}^\ast \to \{0,1\}^\ast$ si para todo $x \in \{0,1\}^\ast$ con longitud $|x| = n \in \mathbb{N}$ se tiene que 
+$$P\left[C_n\left(\ket{x}\ket{0}^{\otimes p(n)}\right) = f(x)\ket{0}^{\otimes p(n)}\right] \geq \frac23$$
 :::
 
-La constante $\frac23$ de la definición es arbitraria; dada una familia de circuitos cuánticos que calcule una función $f$ con probabilidad de éxito no nula podemos calcularla con probabilidad de éxito tan cercana a 1 como queramos sin más que repetir el algoritmo una cantidad constante de veces.
+La constante $\frac23$ es arbitraria; dada una familia de circuitos cuánticos que calcule una función $f$ con probabilidad de éxito no nula podemos calcularla con probabilidad de éxito tan cercana a 1 como queramos sin más que repetir el algoritmo una cantidad constante de veces.
 
-Una familia arbirtraria de circuitos puede calcular funciones no computables por una máquina de Turing; en estos casos la familia no sería realizable físicamente. Por ello debemos restringirnos a familias *uniformes*, que son constructibles físicamente
+Por último nos restringimos a familias de circuitos cuánticos que podamos calcular eficientemente.
 
 :::{.definition}
-Una *familia uniforme de circuitos cuánticos* es una sucesión de circuitos cuánticos $\{C_n\}_{n \in \mathbb{N}}$ tal que existe una máquina de Turing $M$ que calcula dado $n \in \mathbb{N}$ una descripción de $C_n$.
-
-Una familia uniforme de circuitos cuánticos se dice *de complejidad* $f(n)$ (resp. *polinomial*) si $M$ se ejecuta en tiempo $f(n)$ (resp. polinomial).
+Una *familia polinomial uniforme de circuitos cuánticos* es una sucesión de circuitos cuánticos $\{C_n\}_{n \in \mathbb{N}}$ tal que existe un algoritmo de complejidad polinomial en $n$ que calcula dado $n \in \mathbb{N}$ una descripción de $C_n$.
 :::
 
-La descripción del circuito puede limitarse a describir su grafo dirigido asociado a partir de su matriz de adyacencia junto con las etiquetas de cada nodo.
-
-
-
-Dada una máquina de Turing $M$ que calcula una función $f$ con complejidad $O(T(n))$ existe una familia uniforme de circuitos cuánticos puede calcular $f$ con eficiencia $O(T(n))$, por lo que el modelo cuántico subsume al modelo clásico. Sin embargo para simplificar la presentación de los algoritmos estos tendrán una parte clásica y otra cuántica.
+Dado un algoritmo clásico que calcula una función $f$ con complejidad $O(T(n))$ existe una familia uniforme de circuitos cuánticos puede calcular $f$ con eficiencia $O(T(n))$, por lo que el modelo cuántico subsume al modelo clásico. Sin embargo para simplificar la presentación de los algoritmos estos tendrán una parte clásica y otra cuántica.
 
 
 ## Transformada de Fourier cuántica
@@ -139,7 +148,7 @@ Dada una máquina de Turing $M$ que calcula una función $f$ con complejidad $O(
 TODO
 
 
-## El problema del subgrupo oculto abeliano
+## Resolución del problema del subgrupo oculto abeliano
 
 En esta sección describimos la principal aplicación de la QFT en la computación cuántica. El problema más general conocido que puede resolverse haciendo uso de este algoritmo es el problema del subgrupo oculto para grupos abelianos finitamente generados. 
 
