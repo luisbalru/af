@@ -12,8 +12,38 @@ bibliography: assets/citas.bib
 biblio-style: apalike
 link-citations: true
 citation-style: assets/estilo.csl
-secnumdepth: 3
+secnumdepth: 2
+toc-depth: 2
 numbersections: true
 linkReferences: true
 toc: true
+prefixes:
+  prop:
+    ref:
+    - 'prop.$\;$'
+    - 'props.$\;$'
+    title: Proposición
+  paso:
+    ref:
+    - 'paso$\;$'
+    - 'pasos$\;$'
+    title: Paso
+  thm:
+    ref:
+    - 'teorema$\;$'
+    - 'teoremas$\;$'
+    title: Teorema
+  lemma:
+    ref:
+    - 'lema$\;$'
+    - 'lemas$\;$'
+    title: Lema
 ---
+
+\newpage
+
+# Introducción
+
+TODO
+
+\newpage
