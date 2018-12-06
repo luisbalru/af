@@ -28,6 +28,8 @@ La computación cuántica se restringe tradicionalmente a sistemas cuánticos de
 Utilizamos la notación habitual en mecánica cuántica, en la que los vectores del espacio de Hilbert se representan por *kets* de la forma $\ket{\psi}, \ket{\psi}$. Cada ket tiene asociado un *bra*, que en el caso finito podemos identificar con su adjunto conjugado $\bra{\psi} = \ket{\psi}^\dagger$. De esta forma el producto escalar se define $(\ket{\psi},\ket{\phi}) := \bk{\psi}{\phi} := \ket{\psi}^\dagger \ket{\phi}$.
 
 Un **qubit** es un sistema cuántico con espacio de estados de dimensión 2 con una base ortonormal $(\ket{0},\ket{1})$. El término se utiliza también para referirse a un estado concreto; utilizando la identificación con representantes de norma 1 tenemos que un qubit es por tanto un vector $$\ket{\psi} = \alpha \ket{0} + \beta \ket{1} \text{ tal que } \norm{\ket{\psi}} = |\alpha|^2 + |\beta|^2 = 1.$$
+$\alpha$ y $\beta$ son las amplitudes de $\ket{0}$ y $\ket{1}$ respectivamente.
+
 En computación cuántica nos restringimos a sistemas compuestos por qubits. Esta restricción no supone ningún cambio en términos de qué problemas pueden resolverse eficientemente en un ordenador cuántico[@NielsenQuantumComputationQuantum2010]. 
 
 ### Sistemas compuestos 
@@ -147,7 +149,26 @@ El concepto de calculabilidad en tiempo polinomial cuántico formaliza qué func
 
 ## Transformada de Fourier cuántica
 
-En esta sección definimos la transformada de Fourier cuántica y probamos que es calculable en tiempo polinomial cuántico, en concreto con circuitos con un número de puertas del orden $O(n \log n)$.
+En esta sección definimos la transformada de Fourier cuántica y vemos cómo calcularla de forma eficiente en ordenadores cuánticos.
+
+:::{.definition}
+Sea $$\ket{\phi} = \sum_{k = 0}^{N-1} c_k\ket{k}$$ un estado cuántico de un sistema compuesto.
+Su *transformada de Fourier cuántica* es el estado cuántico que surge de la aplicación de la transformada discreta de Fourier normalizada (TODO cita) a su vector de coordenadas:
+$$\ket{\operatorname{DFT}(\phi)} = \sum_{j = 0}^{N-1} (\operatorname{DFT} c)_j\ket{j}$$ <!--TODO notación-->
+:::
+
+El principal resultado de esta sección es:
+
+:::{.theorem #thm:dftc}
+Existe una familia polinomial uniforme de circuitos cuánticos cuya salida para cada estado cuántico es su transformada de Fourier cuántica.
+:::
+:::{.proof}
+TODO falta tener definición y propiedades de DFT
+:::
+
+Nótese que no se conoce una forma de aprovechar esta familia de circuitos para el cálculo directo de la transformada discreta de Fourier normalizada (esto es, no sabemos si la transformada discreta de Fourier es calculable en tiempo polinomial cuántico) ya que no podemos observar las amplitudes del estado cuántico.
+
+A pesar de esta importante limitación esta familia polinomial uniforme de circuitos cuánticos puede utilizarse para el cálculo de funciones en tiempo polinomial cuántico que no conocemos que puedan ser calculadas en tiempo polinomial clásico, como es el caso de la factorización de enteros que veremos en la próxima sección.
 
 ## El algoritmo de Shor
 
@@ -164,36 +185,84 @@ Notamos que el tiempo de ejecución depende del logaritmo de $N$ dado que $N$ se
 En primer lugar discutimos la parte cuántica que hace uso de la transformada de Fourier cuántica.
 El algoritmo que proporcionamos demuestra el siguiente lema:
 
-:::{.lemma #lemma:orden}
-Sean $N$ entero y $x \in (\mathbb{Z}_N)^\times$.
-El orden de $x$ en el grupo $(\mathbb{Z}_N)^\times$ es calculable en tiempo polinomial cuántico.
+:::{.lemma #lemma:phase}
+Sea $U$ una transformación unitaria con un valor propio $e^{2 \pi i\varphi}$.
+Una aproximación de $n$-bits de $\varphi$ es calculable en tiempo polinomial cuántico ($O(n^2))$.
 :::
 
+:::{.algorithm name="Estimación de fase"}
+TODO
+:::
 
+A partir del [@lemma:phase] probamos que el cálculo de la parte cuántica del algoritmo de Shor puede hacerse en tiempo polinomial cuántico:
+
+:::{.lemma #lemma:orden}
+Sean $N$ entero y $x \in U(\mathbb{Z}_N)$.
+El orden de $x$ en el grupo $U(\mathbb{Z}_N)$ es calculable en tiempo polinomial cuántico.
+:::
+:::{.proof}
+Consideramos la aplicación unitaria $U$
+$$\ket{j}\ket{k} \mapsto\ket{j}\ket{x^jk \mod N}$$
+
+TODO
+:::
+
+Por último, la parte clásica reduce el problema de factorización al cálculo del orden de un cierto elemento.
 
 ### Parte clásica
 
-El funcionamiento de la parte clásica del algoritmo de Shor viene dado por los siguientes dos teoremas:
+El funcionamiento de la parte clásica del algoritmo de Shor viene dado por los siguientes dos teoremas, cuyo enunciado y demostración se han adaptado de [@NielsenQuantumComputationQuantum2010]:
 
 :::{.theorem #thm:divisores}
-Sea $N$ un número compuesto y $x \in \mathbb{Z}_N$ una solución no trivial a la ecuación $x^2 = 1 \, \mod N$.
-Entonces $\gcd(x-1,N)$ o $\gcd(x+1,N)$ es un divisor no trivial de $N$ calculable en tiempo $O(\log^3 N)$.
+Sea $N$ un número compuesto y $x \in \mathbb{Z}_N, x \notin \{-1,1\}$ una solución a la ecuación $x^2 = 1 \, \mod N$.
+Entonces $\gcd(x-1,N)$ es un divisor no trivial de $N$ calculable en tiempo $O(\log^3 N)$.
 :::
 :::{.proof}
-TODO
+Por hipótesis $N | (x+1)(x-1)$, pero $x-1 < x+1 < N$, luego $N \not|(x+1)$ y $N \not|(x-1)$.
+
+Supongamos que $x-1$ fuera coprimo con $N$ entonces, por la identidad de Bézout y usando que $x^2 -1 = Nk$, 
+$$aN + b(x-1) = 1 \implies aN(x+1) + b(x^2-1) = x+1 \implies N(a(x+1) + bK) = x+1 \implies N |x+1$$
+lo que es una contradicción.
+
+Por tanto $\gcd(x-1,N) \neq 1$. Además $\gcd(x-1,N) < N$, por lo que es un divisor no trivial de $N$.
+Para calcularlo utilizamos el algoritmo de Euclides.
 :::
 
 :::{.theorem #thm:probabilidad}
-Sea $N$ un entero compuesto impar positivo con $m$ factores primos distintos. 
-Sea $x \in (\mathbb{Z}_N)^\times$ elegido aleatoriamente de forma uniforme, $r = \operatorname{ord}(x)$.
+Sea $N$ un entero compuesto impar positivo con más de un factor. 
+Sea $x \in U(\mathbb{Z}_N)$ elegido aleatoriamente de forma uniforme, $r = \operatorname{ord}(x)$.
 Entonces
-$$P[r \text{ es par y } x^{r/2} \neq -1 \mod N] \geq 1 - \frac{1}{2^m}$$
+$$P[r \text{ es par y } x^{r/2} \neq -1 \mod N] > \frac{1}{2}$$
 :::
 :::{.proof}
-TODO
+Si $N$ se descompone como $N = \prod_1^M p_i^{e_i}$ entonces
+$$U(\mathbb{Z}_N) \simeq \prod_{i = 1}^M U(\mathbb{Z}_{p_i^{e_i}}), \text{ con el isomorfismo } x \mapsto (x \!\!\!\mod p_i^{e_i})_{i = 1, \dots, N},$$
+por el teorema chino del resto, luego tomar $x \in U(\mathbb{Z}_N)$ uniformemente es equivalente a tomar $x_i \in U(\mathbb{Z}_{p_i^{e_i}})$ uniformemente.
+
+Sea $r_i = \operatorname{ord}(x_j)$ y $2^{d_i}$ la máxima potencia de 2 que divide a $r_i$, $2^d$ la máxima potencia de 2 que divide a $r$.
+
+::::{.claim}
+Si $r$ es impar o $x^{r/2} = -1 \mod N$ para todo $i,j$ se tiene que $d_i = d_j$.
+::::
+
+En efecto, supongamos que $r$ es impar. Entonces, como $r_i | r$ para todo $i$ tenemos que $d_i = 0$ para todo $i$.
+Por otra parte, si $r$ es par y $x^{r/2} = -1 \mod N$ tenemos que, para todo $i$,
+$$x^{r/2} = -1 \mod p_i^{e_i} \implies r_i \not | (r/2) \implies  d_i = d \,\forall i,$$
+donde en la segunda implicación hemos usado que $r_i | r$.
+
+::::{.claim}
+Sea $2^{d'_i}$ la mayor potencia de 2 que divide a $\varphi(p_i^{e_i})$.
+Entonces $P[2^{d'_i} | r_i] = 1/2$.
+::::
+Sabemos que $U(\mathbb{Z}_{p_i^{e_i}}) \simeq C_{\varphi(p_i^{e_i})} \simeq \langle g \rangle$, luego $x_i = g^k$ para cierto $k$.
+
+Si $k$ es impar entonces $r_i$ es par, luego, como $\varphi(p_i^{e^i}) | kr_i$, tenemos que $2^d | r_i$.
+Si $k$ es par entonces podemos ver que $r_i | \varphi(p_i^{e_i})$, luego $2^d \not | r_i$.
+
+Por tanto, usando ambas afirmaciones tenemos que la probabilidad de que $r$ sea impar o $x^{r/2} = -1 \mod N$ es menor o igual a $\frac{1}{2^m} < \frac{1}{4}$, lo que prueba el resultado.
 :::
 
-A partir de estos teoremas podemos exponer el algoritmo de Shor:
+A partir de estos teoremas queda justificado el algoritmo de Shor:
 
 :::{.algorithm name='Algoritmo de Shor'}
 
@@ -213,7 +282,7 @@ Tiempo de ejecución
 #. Elige $x$ uniformemente de $\mathbb{Z}_N\backslash\{0\}$.
 #. \label{paso:cuant} Si $\gcd(x,N) > 1$: **devuelve** $\gcd(x,N)$. 
    En otro caso, halla $r := \operatorname{ord}(r,N)$.
-#. Si $r$ es par y $x^{r/2} \neq -1 \mod N$  entonces **devuelve** $\gcd(x^{r/2}-1,N)$ o $\gcd(x^{r/2} + 1,N)$. En otro caso **falla**.
+#. Si $r$ es par y $x^{r/2} \neq -1 \mod N$ **devuelve** $\gcd(x^{r/2}-1,N)$. En otro caso **falla**.
 :::
 
 Para justificar el algoritmo notamos que:
@@ -221,4 +290,6 @@ Para justificar el algoritmo notamos que:
 1. El [@paso:ab] es calculable en tiempo $O(\log^3 N)$ mediante *exponenciación binaria*.
 2. En [@paso:cuant] utilizamos el [@lemma:orden] para obtener el orden.
 3. La corrección del algoritmo en el último paso viene justificada por [@thm:divisores].
-4. La probabilidad de fallo del algoritmo 
+4. La probabilidad de fallo viene dada por [@thm:probabilidad] que nos da error acotado.
+
+Todos los pasos son calculables en tiempo polinomial cuántico, luego el algoritmo es calculable en tiempo polinomial cuántico. Si queremos obtener todos los factores sólo tenemos que aplicar recursivamente el algoritmo con el factor obtenido $c$ y con $N/c$.
