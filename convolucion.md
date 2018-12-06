@@ -20,7 +20,7 @@ Dadas dos secuencias $\{x\} = x_1, \dots, x_N$, $\{y\} = y_1, \dots, y_N$ de $N$
 
 El siguiente Teorema establece una relación fundamental entre la convolución de secuencias y la DFT:  la DFT de la convolución de secuencias es el producto de sus respectivas DFT.
 
-:::{.definition #thm:conv}
+:::{.theorem #thm:conv}
 Dadas dos secuencias $\{x\} = x_1, \dots, x_N$, $\{y\} = y_1, \dots, y_N$ de $N$ números complejos periódicas (esto es, considerando $x_{k \pm N} = x_k, y_{k \pm N} = y_k$) se verifica
 
 $$\mathcal{F}(\{x\} \ast \{y\}) = \frac{1}{N} \mathcal{F}\{x\} \mathcal{F}\{y\} \text{.}$$
